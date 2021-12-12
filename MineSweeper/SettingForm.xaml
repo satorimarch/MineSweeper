@@ -7,33 +7,39 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
-        Title="Settings" Height="450" Width="350">
-    
-    
+        Title="Settings" Height="350" Width="350">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="34*"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="251*"/>
-            <RowDefinition Height="80*"/>
+            <RowDefinition Height="258*"/>
+            <RowDefinition Height="77*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Label Content="格子数量：" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBox HorizontalAlignment="Left" VerticalAlignment="Center" Height="24" Width="50" x:Name="TextBoxRow"></TextBox>
-            <Label Content="×" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center"></Label>
-            <TextBox HorizontalAlignment="left" VerticalAlignment="Center" Height="24" Width="50" x:Name="TextBoxColumn"></TextBox>
-        </StackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="131*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="31*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                <Label Content="格子数量：" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBox HorizontalAlignment="Left" VerticalAlignment="Center" Height="24" Width="50" x:Name="TextBoxRow"></TextBox>
+                <Label Content="×" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center"></Label>
+                <TextBox HorizontalAlignment="left" VerticalAlignment="Center" Height="24" Width="50" x:Name="TextBoxColumn"></TextBox>
+            </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="2">
-            <Label Content="雷的数量：" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <TextBox HorizontalAlignment="Left" VerticalAlignment="Center" Height="24" Width="50" x:Name="TextBoxMine"></TextBox>
-        </StackPanel>
-        <Button Content="确定" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="4" Width="40" Height="25" Click="Button_Click"/>
+            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" >
+                <Label Content="雷的数量：" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBox HorizontalAlignment="Left" VerticalAlignment="Center" Height="24" Width="50" x:Name="TextBoxMine"></TextBox>
+            </StackPanel>
 
+
+        </Grid>
+
+        <Button Grid.Row="1" Content="确定" HorizontalAlignment="Center" VerticalAlignment="Top" Width="50" Height="30" Click="Button_Click" />
     </Grid>
 </Window>

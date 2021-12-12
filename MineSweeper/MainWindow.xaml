@@ -6,12 +6,18 @@
         xmlns:local="clr-namespace:MineSweeper" xmlns:MineSweeperControl="clr-namespace:MineSweeper.MineSweeperControl"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="扫雷 ver1.0" Height="450" Width="800">
+        Title="扫雷 ver1.0" Height="450" Width="800"
+        MinHeight="200" MinWidth="500">
 
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="设置" Click="MenuItem_Click"/>
-            <MenuItem Header="关于"/>
+            <MenuItem Header="主题">
+                <MenuItem Header="默认主题" Click="MenuItem_Click_Theme" Uid="0" />
+                <MenuItem Header="深色主题" Click="MenuItem_Click_Theme" Uid="1" />
+
+            </MenuItem>
+            <MenuItem Header="关于" Click="MenuItem_Click_About"/>
         </Menu>
 
         <Grid>
@@ -20,12 +26,12 @@
                 <ColumnDefinition Width="7*"/>
             </Grid.ColumnDefinitions>
 
-            <MineSweeperControl:MineSweeperMap x:Name="map" OnRestMineChanged="Map_OnRestMineChanged" OnGameStart="map_OnGameStart"/>
+            <MineSweeperControl:MineSweeperMap x:Name="map" OnGameFinish="Map_OnGameFinish" OnRestMineChanged="Map_OnRestMineChanged" OnGameStart="Map_OnGameStart" Margin="10,0,0,10"/>
             <StackPanel  Grid.Column="1">
-                <Label Content="剩余雷数：" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <Label x:Name="LabelMine" Content="" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <Label Content="已用时间：" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <Label x:Name="LabelTime" Content="" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <Label Content="剩余雷数" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <Label x:Name="LabelMine" Content="0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <Label Content="已用时间" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <Label x:Name="LabelTime" Content="00:00" HorizontalAlignment="Center" VerticalAlignment="Top"/>
             </StackPanel>
         </Grid>
     </DockPanel>
