@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,12 +17,14 @@ using System.Windows.Shapes;
 
 namespace MineSweeper.MineSweeperControl
 {
+
+    using tuple = Tuple<int, int>;
+
     /// <summary>
     /// MineSweeperControl.xaml 的交互逻辑
     /// </summary>
     public partial class MineSweeperMap : UserControl
     {
-
         public int RestMine { get; private set; }
         public int RestButton { get; private set; }
 
@@ -161,6 +164,13 @@ namespace MineSweeper.MineSweeperControl
         {
             MyButton button = (MyButton)sender;
 
+            //if (e.ChangedButton == MouseButton.Left) {
+            //    Console.WriteLine("left");
+            //}
+            //if (e.ChangedButton == MouseButton.Right) {
+            //    Console.WriteLine("right");
+            //}
+
             if (!button.IsFlag) { // 未被标记时, 设置标记
                 RestButton--;
                 RestMine--;
@@ -181,12 +191,11 @@ namespace MineSweeper.MineSweeperControl
             CheckFinishGame();
         }
 
+        /// <summary>
+        /// 左键格子事件
+        /// </summary>
         private void MyButton_Click(object sender, RoutedEventArgs e)
         {
-            /// <summary>
-            /// 左键格子事件
-            /// </summary>
-
             if (gameStart == false) {
                 gameStart = true;
                 SetMine(sender);
@@ -215,38 +224,76 @@ namespace MineSweeper.MineSweeperControl
             }
         }
 
+        /// <summary>
+        /// 判断button是否在地图里
+        /// </summary>
+        /// <returns>如果在地图里则返回 true</returns>
         private bool IsButtonInMap(int row, int column)
         {
             return row >= 0 && row < MapRow && column >= 0 && column < MapColumn;
         }
 
+        /// <summary>
+        /// 点开这个格子和附近的格子(bfs)
+        /// </summary>
         private void UnlockButton(int row, int column)
         {
-            /// <summary>
-            /// 点开这个格子(包含胜利判定)
-            /// 如果是空则会递归地点开附近的格子
-            /// </summary>
+            Queue<tuple> queue = new Queue<tuple>(); // 注意本命名空间最开始有一行: using tuple = Tuple<int, int>;
+            queue.Enqueue(Tuple.Create(row, column));
+            
+            while (queue.Count != 0) {
+                tuple pos = queue.Dequeue();
 
-            if (!IsButtonInMap(row, column)) return;
+                if (!IsButtonInMap(pos.Item1, pos.Item2)) continue;
 
-            MyButton button = (MyButton)map.Children[row * MapColumn + column];
+                MyButton button = (MyButton)map.Children[pos.Item1 * MapColumn + pos.Item2];
 
-            if (button.IsFlag || button.IsMine || button.IsEnabled == false) return;
+                if (button.IsFlag || button.IsMine || !button.IsEnabled) continue;
 
+                button.IsEnabled = false;
+                RestButton--;
 
-            button.IsEnabled = false;
-            RestButton--;
-
-            if (button.AroundMineNum == 0) {
-                button.Content = "";
-                for (int i = 0; i < 8; i++) {
-                    UnlockButton(row + moveRow[i], column + moveColumn[i]);
+                if (button.AroundMineNum == 0) {
+                    button.Content = "";
+                    for (int i = 0; i < 8; i++) {
+                        queue.Enqueue(Tuple.Create(pos.Item1 + moveRow[i], pos.Item2 + moveColumn[i]));
+                    }
                 }
+                else {
+                    button.Content = button.AroundMineNum.ToString();
+                }
+
             }
-            else {
-                button.Content = button.AroundMineNum.ToString();
-            }
+
         }
+
+
+        /// <summary>
+        /// 点开这个格子
+        /// 如果是空则会递归地点开附近的格子
+        /// </summary>
+        //private void UnlockButton(int row, int column)
+        //{
+        //    if (!IsButtonInMap(row, column)) return;
+
+        //    MyButton button = (MyButton)map.Children[row * MapColumn + column];
+
+        //    if (button.IsFlag || button.IsMine || button.IsEnabled == false) return;
+
+
+        //    button.IsEnabled = false;
+        //    RestButton--;
+
+        //    if (button.AroundMineNum == 0) {
+        //        button.Content = "";
+        //        for (int i = 0; i < 8; i++) {
+        //            UnlockButton(row + moveRow[i], column + moveColumn[i]);
+        //        }
+        //    }
+        //    else {
+        //        button.Content = button.AroundMineNum.ToString();
+        //    }
+        //}
 
         //public void FinishGame(bool win)
         //{
