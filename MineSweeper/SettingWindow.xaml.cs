@@ -17,9 +17,9 @@ namespace MineSweeper
     /// <summary>
     /// SettingForm.xaml 的交互逻辑
     /// </summary>
-    public partial class SettingForm : Window
+    public partial class SettingWindow : Window
     {
-        public SettingForm(int row, int column, int mineNum)
+        public SettingWindow(int row, int column, int mineNum)
         {
             InitializeComponent();
 

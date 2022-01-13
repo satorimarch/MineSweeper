@@ -15,15 +15,16 @@ using System.Windows.Shapes;
 namespace MineSweeper
 {
     /// <summary>
-    /// AboutForm.xaml 的交互逻辑
+    /// GameFinishForm.xaml 的交互逻辑
     /// </summary>
-    public partial class AboutForm : Window
+
+    public partial class GameFinishWindow : Window
     {
-        public AboutForm()
+        public GameFinishWindow(string str)
         {
             InitializeComponent();
 
-            this.Style = (Style)FindResource(typeof(Window));
+            TextBlockGameFinish.Text = str;
         }
     }
 }

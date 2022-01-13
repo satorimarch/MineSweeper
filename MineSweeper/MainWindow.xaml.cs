@@ -56,7 +56,7 @@ namespace MineSweeper
             //}
 
             SettingRunning = true;
-            SettingForm setting = new SettingForm(map.MapRow, map.MapColumn, map.MapMine);
+            SettingWindow setting = new SettingWindow(map.MapRow, map.MapColumn, map.MapMine);
             setting.Owner = this;
             setting.ShowDialog();
         }
@@ -78,7 +78,7 @@ namespace MineSweeper
 
             string show = map.GameWin ? "You Win!" : "You lose...";
 
-            GameFinishForm finishForm = new GameFinishForm(show);
+            GameFinishWindow finishForm = new GameFinishWindow(show);
             finishForm.Owner = this;
             finishForm.ShowDialog();
             map.ResetMap();
@@ -117,7 +117,7 @@ namespace MineSweeper
 
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)
         {
-            AboutForm about = new AboutForm();
+            AboutWindow about = new AboutWindow();
             about.Owner = this;
             about.ShowDialog();
         }

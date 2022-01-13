@@ -191,6 +191,8 @@ namespace MineSweeper.MineSweeperControl
             CheckFinishGame();
         }
 
+        //private void MyButton_
+
         /// <summary>
         /// 左键格子事件
         /// </summary>
