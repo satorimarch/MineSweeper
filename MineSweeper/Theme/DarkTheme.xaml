@@ -104,10 +104,10 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Opacity" Value="0.8" />
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
+                        <DataTrigger Binding="{Binding IsUnlock,RelativeSource={x:Static RelativeSource.Self}}" Value="true">
                             <Setter Property="Background" TargetName="border" Value="#666666"/>
                             <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#838383"/>
-                        </Trigger>
+                        </DataTrigger>
 
 
                     </ControlTemplate.Triggers>

@@ -36,7 +36,7 @@ namespace MineSweeper.MineSweeperControl
 
         private bool gameStart;
         private readonly int[] moveRow = { 1, 1, 1, 0, -1, -1, -1, 0 };
-        private readonly int[] moveColumn = { -1, 0, 1, 1, 1, 0, -1, -1 };
+        private readonly int[] moveCol = { -1, 0, 1, 1, 1, 0, -1, -1 };
 
         public delegate void ChangeRestMineHandler();
         public delegate void GameStartHandler();
@@ -79,14 +79,15 @@ namespace MineSweeper.MineSweeperControl
 
                     MyButton button = new MyButton()
                     {
-                        Style = (Style)FindResource("DefaultButtonStyle"),
                         Row = i,
                         Column = j,
                         IsMine = false,
+                        IsUnlock = false,
+                        Style = (Style)FindResource("DefaultButtonStyle"),
                         //Content = "第" + (i * column + j).ToString() + "个"
                     };
                     button.Click += MyButton_Click;
-                    button.MouseDown += MyButton_RightButtonDown;
+                    button.PreviewMouseDown += MyButton_MouseDown;
 
                     map.Children.Add(button);
                 }
@@ -132,15 +133,15 @@ namespace MineSweeper.MineSweeperControl
             // 计算每个格周围的雷的数量
             for (int i = 0; i < MapRow; i++) {
                 for (int j = 0; j < MapColumn; j++) {
-                    MyButton currentButton = (MyButton)map.Children[i * MapColumn + j];
-                    if (currentButton.IsMine) continue;
+                    MyButton currBtn = (MyButton)map.Children[i * MapColumn + j];
+                    if (currBtn.IsMine) continue;
                     for (int k = 0; k < 8; k++) {
                         int row = i + moveRow[k];
-                        int column = j + moveColumn[k];
+                        int column = j + moveCol[k];
                         if (!IsButtonInMap(row, column)) continue;
                         MyButton button = (MyButton)map.Children[row * MapColumn + column];
                         if (button.IsMine) {
-                            currentButton.AroundMineNum++;
+                            currBtn.AroundMineNum++;
                         }
                     }
                 }
@@ -158,40 +159,18 @@ namespace MineSweeper.MineSweeperControl
         }
 
         /// <summary>
-        /// 右键格子事件, 即flag标记
+        /// 区分右键单击 和 左右键同时单击
         /// </summary>
-        private void MyButton_RightButtonDown(object sender, MouseButtonEventArgs e)
+        private void MyButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MyButton button = (MyButton)sender;
-
-            //if (e.ChangedButton == MouseButton.Left) {
-            //    Console.WriteLine("left");
-            //}
-            //if (e.ChangedButton == MouseButton.Right) {
-            //    Console.WriteLine("right");
-            //}
-
-            if (!button.IsFlag) { // 未被标记时, 设置标记
-                RestButton--;
-                RestMine--;
-
-                button.Style = (Style)FindResource("FlagButtonStyle");
-                button.IsFlag = true;
+            if (e.LeftButton == MouseButtonState.Pressed && e.RightButton == MouseButtonState.Pressed) {
+                MyButton_BothDown(sender);
+            }
+            else if (e.RightButton == MouseButtonState.Pressed) {
+                MyButton_RightButtonDown(sender);
             }
 
-            else { // 已被标记时, 取消标记
-                RestButton++;
-                RestMine++;
-
-                button.Style = (Style)FindResource("DefaultButtonStyle");
-                button.IsFlag = false;
-            }
-
-            MineChange();
-            CheckFinishGame();
         }
-
-        //private void MyButton_
 
         /// <summary>
         /// 左键格子事件
@@ -205,15 +184,17 @@ namespace MineSweeper.MineSweeperControl
 
             MyButton button = (MyButton)sender;
 
-            if (button.IsFlag) {
+            if (button.IsFlag || button.IsUnlock) {
                 return;
             }
+
             else if (button.IsMine) {
 
                 RestButton--;
                 RestMine--;
                 MineChange();
 
+                button.IsUnlock = true;
                 button.Style = (Style)FindResource("MineButtonStyle");
 
                 GameFinish(false);
@@ -223,6 +204,75 @@ namespace MineSweeper.MineSweeperControl
             else {
                 UnlockButton(button.Row, button.Column);
                 CheckFinishGame();
+            }
+        }
+
+        /// <summary>
+        /// 右键格子事件, 即flag标记
+        /// </summary>
+        private void MyButton_RightButtonDown(object sender)
+        {
+            MyButton button = (MyButton)sender;
+
+            if (button.IsUnlock) {
+                return;
+            }
+
+            if (!button.IsFlag) { // 未被标记时, 设置标记
+                RestButton--;
+                RestMine--;
+
+                button.IsFlag = true;
+                button.Style = (Style)FindResource("FlagButtonStyle");
+            }
+
+            else { // 已被标记时, 取消标记
+                RestButton++;
+                RestMine++;
+
+                button.IsFlag = false;
+                button.Style = (Style)FindResource("DefaultButtonStyle");
+            }
+
+            MineChange();
+            CheckFinishGame();
+        }
+
+        /// <summary>
+        /// 左右键同时单击
+        /// </summary>
+        private void MyButton_BothDown(object sender)
+        {
+            MyButton button = (MyButton)sender;
+
+            if(button.IsFlag || !button.IsUnlock || button.AroundMineNum == 0) {
+                return;
+            }
+
+            int countFlag = 0;
+            for(int i = 0; i < 8; i++) {
+                int currRow = button.Row + moveRow[i];
+                int currCol = button.Column + moveCol[i];
+
+                if (IsButtonInMap(currRow, currCol)) {
+                    MyButton currBtn = (MyButton)map.Children[currRow * MapColumn + currCol];
+                    if (currBtn.IsFlag) countFlag++;
+                }
+            }
+
+            if (countFlag == button.AroundMineNum) {
+                for (int i = 0; i < 8; i++) {
+                    int currRow = button.Row + moveRow[i];
+                    int currCol = button.Column + moveCol[i];
+
+                    if (IsButtonInMap(currRow, currCol)) {
+                        MyButton currBtn = (MyButton)map.Children[currRow * MapColumn + currCol];
+                        UnlockButton(currRow, currCol);
+                        if (!currBtn.IsFlag && !currBtn.IsUnlock) {
+                            MyButton_Click(button, null);
+                        }
+                    }
+                }
             }
         }
 
@@ -250,15 +300,15 @@ namespace MineSweeper.MineSweeperControl
 
                 MyButton button = (MyButton)map.Children[pos.Item1 * MapColumn + pos.Item2];
 
-                if (button.IsFlag || button.IsMine || !button.IsEnabled) continue;
+                if (button.IsFlag || button.IsMine || button.IsUnlock) continue;
 
-                button.IsEnabled = false;
+                button.IsUnlock = true;
                 RestButton--;
 
                 if (button.AroundMineNum == 0) {
                     button.Content = "";
                     for (int i = 0; i < 8; i++) {
-                        queue.Enqueue(Tuple.Create(pos.Item1 + moveRow[i], pos.Item2 + moveColumn[i]));
+                        queue.Enqueue(Tuple.Create(pos.Item1 + moveRow[i], pos.Item2 + moveCol[i]));
                     }
                 }
                 else {
@@ -351,7 +401,7 @@ namespace MineSweeper.MineSweeperControl
             this.Resources.MergedDictionaries[0] = dictionary;
 
             foreach (MyButton button in map.Children) {
-                if (button.IsMine && !button.IsEnabled) {
+                if (button.IsMine && button.IsUnlock) {
                     button.Style = (Style)FindResource("MineButtonStyle");
                 }
                 else if (button.IsFlag) {
