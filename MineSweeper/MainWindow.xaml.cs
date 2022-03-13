@@ -37,15 +37,13 @@ namespace MineSweeper
 
             map.ChangeSetting(10, 15, 20);
 
-            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Interval = TimeSpan.FromMilliseconds(100);
             timer.Tick += Timer_Tick;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            DateTime currentTime = DateTime.Now;
-            string temp = (currentTime - startTime).ToString(@"mm\:ss");
-            LabelTime.Content = temp;
+            LabelTime.Content = (DateTime.Now - startTime).ToString(@"mm\:ss");
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -93,26 +91,13 @@ namespace MineSweeper
 
         private void MenuItem_Click_Theme(object sender, RoutedEventArgs e)
         {
-            MenuItem item = (MenuItem)sender;
-
-            string theme = "";
-
-            switch (item.Uid) {
-                case "0":
-                    theme = "Default";
-                    break;
-
-                case "1":
-                    theme = "Dark";
-                    break;
-            }
+            string theme = ((MenuItem)sender).Name;
 
             ResourceDictionary dictionary = new ResourceDictionary();
             dictionary.Source = new Uri(@"pack://application:,,,/Theme/" + theme + "Theme.xaml", UriKind.RelativeOrAbsolute);
             App.Current.Resources.MergedDictionaries[0] = dictionary;
 
             map.ChangeTheme(theme);
-
         }
 
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)

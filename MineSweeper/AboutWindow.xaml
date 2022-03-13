@@ -29,7 +29,7 @@
         <TextBox Height="24" IsReadOnly="True" Grid.Row="2" Grid.Column="3" Text="github.com/satorimarch" TextAlignment="Left" TextWrapping="WrapWithOverflow" Margin="0,1,-6,1" />
 
         <TextBlock Grid.Row="3" Grid.Column="2" Text="Email:" />
-        <TextBox Height="24" IsReadOnly="True" Grid.Row="3" Grid.Column="3" Text="jiangdu@outlook.com" Margin="0,1,-6,1" />
+        <TextBox Height="24" IsReadOnly="True" Grid.Row="3" Grid.Column="3" Text="jiangdu9@outlook.com" Margin="0,1,-6,1" />
 
         <TextBlock Grid.Row="4" Grid.Column="2" Text="Blog:" />
         <TextBox Height="24" IsReadOnly="True" Grid.Row="4" Grid.Column="3" Text="satorimarch.github.io" Margin="0,1,-6,1" />

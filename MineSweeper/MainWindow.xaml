@@ -13,8 +13,8 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="设置" Click="MenuItem_Click"/>
             <MenuItem Header="主题">
-                <MenuItem Header="默认主题" Click="MenuItem_Click_Theme" Uid="0" />
-                <MenuItem Header="深色主题" Click="MenuItem_Click_Theme" Uid="1" />
+                <MenuItem Header="默认主题" Click="MenuItem_Click_Theme" x:Name="Default" />
+                <MenuItem Header="深色主题" Click="MenuItem_Click_Theme" x:Name="Dark" />
             </MenuItem>
             <MenuItem Header="关于" Click="MenuItem_Click_About"/>
         </Menu>

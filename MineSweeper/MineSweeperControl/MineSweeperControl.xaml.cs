@@ -73,6 +73,7 @@ namespace MineSweeper.MineSweeperControl
             map.Columns = MapColumn;
 
             RestButton = MapRow * MapColumn;
+            RestMine = MapMine;
 
             for (int i = 0; i < MapRow; i++) {
                 for (int j = 0; j < MapColumn; j++) {
@@ -111,23 +112,20 @@ namespace MineSweeper.MineSweeperControl
             }
 
             int count = map.Children.Count;
-            RestMine = MapMine;
 
             MineChange();
 
-            MapMine = MapMine;
-
             Random random = new Random();
 
-            for (int i = 1; i <= MapMine;) {
+            for (int i = 1; i <= MapMine; ) {
                 int rd = random.Next(0, count);
                 MyButton button = (MyButton)map.Children[rd];
-                if (button.IsMine || rd == senderPos) {
-                    continue;
+                if (!button.IsMine && rd != senderPos)
+                {
+                    button.IsMine = true;
+                    i++;
+                    //button.Background = Brushes.Green; // test
                 }
-                button.IsMine = true;
-                //button.Background = Brushes.Green; // test
-                i++;
             }
 
             // 计算每个格周围的雷的数量
@@ -147,7 +145,7 @@ namespace MineSweeper.MineSweeperControl
                 }
             }
 
-            // test: 显示每个格周围雷数
+            // test: 显示每个格子周围雷数
             //for (int i = 0; i < MapRow; i++) {
             //    for (int j = 0; j < MapColumn; j++) {
             //        MyButton currentButton = (MyButton)map.Children[i * MapColumn + j];
@@ -203,7 +201,6 @@ namespace MineSweeper.MineSweeperControl
             }
             else {
                 UnlockButton(button.Row, button.Column);
-                CheckFinishGame();
             }
         }
 
@@ -314,9 +311,8 @@ namespace MineSweeper.MineSweeperControl
                 else {
                     button.Content = button.AroundMineNum.ToString();
                 }
-
             }
-
+            CheckFinishGame();
         }
 
 
