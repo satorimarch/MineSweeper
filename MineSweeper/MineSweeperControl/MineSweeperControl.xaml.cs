@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MineSweeper.MineSweeperControl
 {
@@ -107,21 +96,20 @@ namespace MineSweeper.MineSweeperControl
                 senderPos = senderButton.Row * MapColumn + senderButton.Column;
             }
 
-            if (MapMine > map.Children.Count) {
+            int count = MapColumn * MapRow;
+
+            if (MapMine > count) {
                 MessageBox.Show("雷的数量超过总数量", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            int count = map.Children.Count;
 
             MineChange();
 
             Random random = new Random();
 
-            for (int i = 1; i <= MapMine; ) {
+            for (int i = 1; i <= MapMine;) {
                 int rd = random.Next(0, count);
                 MyButton button = (MyButton)map.Children[rd];
-                if (!button.IsMine && rd != senderPos)
-                {
+                if (!button.IsMine && rd != senderPos) {
                     button.IsMine = true;
                     i++;
                     //button.Background = Brushes.Green; // test
@@ -132,14 +120,15 @@ namespace MineSweeper.MineSweeperControl
             for (int i = 0; i < MapRow; i++) {
                 for (int j = 0; j < MapColumn; j++) {
                     MyButton currBtn = (MyButton)map.Children[i * MapColumn + j];
-                    if (currBtn.IsMine) continue;
-                    for (int k = 0; k < 8; k++) {
-                        int row = i + moveRow[k];
-                        int column = j + moveCol[k];
-                        if (!IsButtonInMap(row, column)) continue;
-                        MyButton button = (MyButton)map.Children[row * MapColumn + column];
-                        if (button.IsMine) {
-                            currBtn.AroundMineNum++;
+                    if (!currBtn.IsMine) {
+                        for (int k = 0; k < 8; k++) {
+                            int row = i + moveRow[k];
+                            int column = j + moveCol[k];
+                            if (!IsButtonInMap(row, column)) continue;
+                            MyButton button = (MyButton)map.Children[row * MapColumn + column];
+                            if (button.IsMine) {
+                                currBtn.AroundMineNum++;
+                            }
                         }
                     }
                 }
@@ -242,12 +231,12 @@ namespace MineSweeper.MineSweeperControl
         {
             MyButton button = (MyButton)sender;
 
-            if(button.IsFlag || !button.IsUnlock || button.AroundMineNum == 0) {
+            if (button.IsFlag || !button.IsUnlock || button.AroundMineNum == 0) {
                 return;
             }
 
             int countFlag = 0;
-            for(int i = 0; i < 8; i++) {
+            for (int i = 0; i < 8; i++) {
                 int currRow = button.Row + moveRow[i];
                 int currCol = button.Column + moveCol[i];
 
@@ -289,7 +278,7 @@ namespace MineSweeper.MineSweeperControl
         {
             Queue<tuple> queue = new Queue<tuple>(); // 注意本命名空间最开始有一行: using tuple = Tuple<int, int>;
             queue.Enqueue(Tuple.Create(row, column));
-            
+
             while (queue.Count != 0) {
                 tuple pos = queue.Dequeue();
 
