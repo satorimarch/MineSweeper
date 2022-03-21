@@ -23,7 +23,7 @@ namespace MineSweeper
 
             this.Style = (Style)FindResource(typeof(Window));
 
-            map.ChangeSetting(10, 15, 20);
+            grid.ChangeSetting(10, 15, 20);
 
             timer.Interval = TimeSpan.FromMilliseconds(100);
             timer.Tick += Timer_Tick;
@@ -42,14 +42,14 @@ namespace MineSweeper
             //}
 
             SettingRunning = true;
-            SettingWindow setting = new SettingWindow(map.MapRow, map.MapColumn, map.MapMine);
+            SettingWindow setting = new SettingWindow(grid.MapRow, grid.MapColumn, grid.MapMine);
             setting.Owner = this;
             setting.ShowDialog();
         }
 
         private void Map_OnRestMineChanged()
         {
-            LabelMine.Content = map.RestMine;
+            LabelMine.Content = grid.RestMine;
         }
 
         private void Map_OnGameStart()
@@ -62,19 +62,19 @@ namespace MineSweeper
         {
             timer.Stop();
 
-            string show = map.GameWin ? "You Win!" : "You lose...";
+            string show = grid.GameWin ? "You Win!" : "You lose...";
 
             GameFinishWindow finishForm = new GameFinishWindow(show);
             finishForm.Owner = this;
             finishForm.ShowDialog();
-            map.ResetMap();
+            grid.ResetMap();
 
             //if (MessageBox.Show(show, "Game Over", MessageBoxButton.OK, MessageBoxImage.Information) == MessageBoxResult.OK) {
             //map.ResetMap();
             //}
 
             LabelTime.Content = "00:00";
-            LabelMine.Content = map.MapMine;
+            LabelMine.Content = grid.MapMine;
         }
 
         private void MenuItem_Click_Theme(object sender, RoutedEventArgs e)
@@ -85,7 +85,7 @@ namespace MineSweeper
             dictionary.Source = new Uri(@"pack://application:,,,/Theme/" + theme + "Theme.xaml", UriKind.RelativeOrAbsolute);
             App.Current.Resources.MergedDictionaries[0] = dictionary;
 
-            map.ChangeTheme(theme);
+            grid.ChangeTheme(theme);
         }
 
         private void MenuItem_Click_About(object sender, RoutedEventArgs e)

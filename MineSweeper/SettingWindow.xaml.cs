@@ -33,7 +33,7 @@ namespace MineSweeper
 
             else {
                 MainWindow mainWindow = (MainWindow)Owner;
-                mainWindow.map.ChangeSetting(row, column, mineNum);
+                mainWindow.grid.ChangeSetting(row, column, mineNum);
                 mainWindow.timer.Stop();
                 mainWindow.LabelTime.Content = "00:00";
             }

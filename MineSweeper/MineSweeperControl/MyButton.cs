@@ -15,7 +15,7 @@ namespace MineSweeper.MineSweeperControl
 
         // 依赖属性
         public static readonly DependencyProperty IsUlockProperty = DependencyProperty.Register("IsUnlock", typeof(bool), typeof(MyButton));
-        public bool IsUnlock
+        public bool IsUncover
         {
             get { return (bool)GetValue(IsUlockProperty); }
             set { SetValue(IsUlockProperty, value); }

@@ -18,5 +18,5 @@
     </UserControl.Resources>
 
 
-    <UniformGrid x:Name="map"/>
+    <UniformGrid x:Name="grid"/>
 </UserControl>
