@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -14,7 +15,8 @@ namespace MineSweeper
         }
 
         public bool SettingRunning { get; set; }
-        internal DispatcherTimer timer = new DispatcherTimer();
+        internal Timer timer;
+
         private DateTime startTime;
 
         public MainWindow()
@@ -22,16 +24,24 @@ namespace MineSweeper
             InitializeComponent();
 
             this.Style = (Style)FindResource(typeof(Window));
-
             grid.ChangeSetting(10, 15, 20);
 
-            timer.Interval = TimeSpan.FromMilliseconds(100);
-            timer.Tick += Timer_Tick;
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            LabelTime.Content = (DateTime.Now - startTime).ToString(@"mm\:ss");
+            timer = new Timer
+            {
+                Interval = 100,
+                Enabled = false
+            };
+            timer.Elapsed += (o, e) =>
+            {
+                LabelTime.Dispatcher.BeginInvoke(
+                    new Action(
+                        delegate
+                        {
+                            LabelTime.Content = (DateTime.Now - startTime).ToString(@"mm\:ss");
+                        }
+                    )
+                );
+            };
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
