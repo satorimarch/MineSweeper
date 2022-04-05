@@ -4,6 +4,7 @@
 
     <SolidColorBrush x:Key="FontForeground" Color="#45474D"/>
 
+    
     <Style TargetType="Grid">
         <Setter Property="Background" Value="AliceBlue"></Setter>
     </Style>
@@ -79,10 +80,17 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Opacity" Value="0.8" />
                         </Trigger>
-                        <DataTrigger Binding="{Binding IsUnlock,RelativeSource={x:Static RelativeSource.Self}}" Value="true">
+                        <Trigger Property="IsUncover" Value="True">
+                            <Setter Property="Background" TargetName="border" Value="#F4F4F4"/>
+                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#838383"/>
+                        </Trigger>
+
+                        <!--
+                        <DataTrigger Binding="{Binding IsUncover,RelativeSource={x:Static RelativeSource.Self}}" Value="true">
                             <Setter Property="Background" TargetName="border" Value="#F4F4F4"/>
                             <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#838383"/>
                         </DataTrigger>
+                        -->
 
 
                     </ControlTemplate.Triggers>

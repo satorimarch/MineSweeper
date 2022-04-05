@@ -31,6 +31,7 @@ namespace MineSweeper
                 Interval = 100,
                 Enabled = false
             };
+
             timer.Elapsed += (o, e) =>
             {
                 LabelTime.Dispatcher.BeginInvoke(

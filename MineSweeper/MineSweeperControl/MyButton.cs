@@ -14,11 +14,11 @@ namespace MineSweeper.MineSweeperControl
         public bool IsFlag { get; set; } // 是否被标记
 
         // 依赖属性
-        public static readonly DependencyProperty IsUlockProperty = DependencyProperty.Register("IsUnlock", typeof(bool), typeof(MyButton));
+        public static readonly DependencyProperty IsUncoverProperty = DependencyProperty.Register("IsUncover", typeof(bool), typeof(MyButton));
         public bool IsUncover
         {
-            get { return (bool)GetValue(IsUlockProperty); }
-            set { SetValue(IsUlockProperty, value); }
+            get { return (bool)GetValue(IsUncoverProperty); }
+            set { SetValue(IsUncoverProperty, value); }
         }
 
         public MyButton()
