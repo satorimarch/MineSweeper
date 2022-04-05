@@ -4,7 +4,14 @@
 
     <SolidColorBrush x:Key="Background" Color="#252840"/>
     <SolidColorBrush x:Key="FontForeground" Color="#C4C4C4"/>
-    
+    <SolidColorBrush x:Key="LighterBackground" Color="#2D3359"/>
+    <SolidColorBrush x:Key="ButtonBackground" Color="#333333"/>
+    <SolidColorBrush x:Key="LighterButtonBackground" Color="#666666"/>
+    <SolidColorBrush x:Key="LighterButtonForeground" Color="#838383"/>
+    <SolidColorBrush x:Key="FlagButtonColor" Color="#DEA677"/>
+    <SolidColorBrush x:Key="MineButtonColor" Color="#FF6666"/>
+
+
     <Style TargetType="Grid">
         <Setter Property="Background" Value="{StaticResource Background}" />
     </Style>
@@ -23,52 +30,32 @@
 
     <Style TargetType="TextBox">
         <Setter Property="Foreground" Value="{StaticResource FontForeground}" />
-        <Setter Property="Background" Value="#2D3359" />
-        <Setter Property="BorderBrush" Value="#666666" />
+        <Setter Property="Background" Value="{StaticResource LighterBackground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource LighterButtonBackground}" />
     </Style>
 
-    <Style TargetType="Button">
-        <Setter Property="Background" Value="#2D3359" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" SnapsToDevicePixels="true">
-                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.8" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+    <Style TargetType="local:MyButton">
+        <Style.Triggers>
+            <Trigger Property="IsUncover" Value="true">
+                <Setter Property="Background" Value="{StaticResource LighterButtonBackground}" />
+                <Setter Property="Foreground" Value="{StaticResource LighterButtonForeground}" />
+            </Trigger>
+            <Trigger Property="IsFlag" Value="True">
+                <Setter Property="Background" Value="{StaticResource FlagButtonColor}" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMine" Value="True" />
+                    <Condition Property="IsUncover" Value="True" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Background" Value="{StaticResource MineButtonColor}" />
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+        </Style.Triggers>
 
-    <Style x:Key="MineButtonStyle" TargetType="local:MyButton" >
-        <Setter Property="Background" Value="#FF6666" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:MyButton}">
-                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" SnapsToDevicePixels="true">
-                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsDefaulted" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.8" />
-                        </Trigger>
+        <Setter Property="Background" Value="{StaticResource ButtonBackground}" />
 
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="FlagButtonStyle" TargetType="local:MyButton" >
-        <Setter Property="Background" Value="#DEA677" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:MyButton}">
@@ -82,44 +69,11 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Opacity" Value="0.8" />
                         </Trigger>
-
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="DefaultButtonStyle" TargetType="local:MyButton" >
-        <Setter Property="Background" Value="#333333" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:MyButton}">
-                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" SnapsToDevicePixels="true">
-                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsDefaulted" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.8" />
-                        </Trigger>
-                        <Trigger Property="IsUncover" Value="True">
-                            <Setter Property="Background" TargetName="border" Value="#666666"/>
-                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#838383"/>
-                        </Trigger>
-                        <!--
-                        <DataTrigger Binding="{Binding IsUncover,RelativeSource={x:Static RelativeSource.Self}}" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="#666666"/>
-                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#838383"/>
-                        </DataTrigger>
-                        -->
-
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
 
 </ResourceDictionary>

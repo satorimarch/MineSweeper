@@ -3,14 +3,19 @@
                     xmlns:local="clr-namespace:MineSweeper.MineSweeperControl">
 
     <SolidColorBrush x:Key="FontForeground" Color="#45474D"/>
+    <SolidColorBrush x:Key="BackgroundColor" Color="AliceBlue"/>
+    <SolidColorBrush x:Key="MineButtonColor" Color="#FF6666"/>
+    <SolidColorBrush x:Key="FlagButtonColor" Color="#99CCFF"/>
+    <SolidColorBrush x:Key="ButtonBackgound" Color="#D4D4D4"/>
+    <SolidColorBrush x:Key="ButtonLighterBackgound" Color="#F4F4F4"/>
+    <SolidColorBrush x:Key="Buttonforegound" Color="#838383"/>
 
-    
     <Style TargetType="Grid">
-        <Setter Property="Background" Value="AliceBlue"></Setter>
+        <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
     </Style>
 
     <Style TargetType="Menu">
-        <Setter Property="Background" Value="AliceBlue"></Setter>
+        <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
     </Style>
 
     <Style TargetType="Window">
@@ -21,8 +26,28 @@
         <Setter Property="Foreground" Value="{StaticResource FontForeground}" />
     </Style>
 
-    <Style x:Key="MineButtonStyle" TargetType="local:MyButton" >
-        <Setter Property="Background" Value="#FF6666" />
+    <Style TargetType="local:MyButton">
+        <Style.Triggers>
+            <Trigger Property="IsUncover" Value="true">
+                <Setter Property="Background" Value="{StaticResource ButtonLighterBackgound}" />
+                <Setter Property="Foreground" Value="{StaticResource Buttonforegound}" />
+            </Trigger>
+            <Trigger Property="IsFlag" Value="True">
+                <Setter Property="Background" Value="{StaticResource FlagButtonColor}" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMine" Value="True" />
+                    <Condition Property="IsUncover" Value="True" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Background" Value="{StaticResource MineButtonColor}" />
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+        </Style.Triggers>
+
+        <Setter Property="Background" Value="{StaticResource ButtonBackgound}" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:MyButton}">
@@ -33,71 +58,14 @@
                         <Trigger Property="IsDefaulted" Value="true">
                             <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                         </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
+                        <!--<Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Opacity" Value="0.8" />
-                        </Trigger>
-
+                        </Trigger>-->
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
-    <Style x:Key="FlagButtonStyle" TargetType="local:MyButton" >
-        <Setter Property="Background" Value="#99CCFF" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:MyButton}">
-                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" SnapsToDevicePixels="true">
-                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsDefaulted" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.8" />
-                        </Trigger>
-
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="DefaultButtonStyle" TargetType="local:MyButton" >
-        <Setter Property="Background" Value="#D0D0D0" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:MyButton}">
-                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" SnapsToDevicePixels="true">
-                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsDefaulted" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.8" />
-                        </Trigger>
-                        <Trigger Property="IsUncover" Value="True">
-                            <Setter Property="Background" TargetName="border" Value="#F4F4F4"/>
-                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#838383"/>
-                        </Trigger>
-
-                        <!--
-                        <DataTrigger Binding="{Binding IsUncover,RelativeSource={x:Static RelativeSource.Self}}" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="#F4F4F4"/>
-                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#838383"/>
-                        </DataTrigger>
-                        -->
-
-
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
+ 
 
 </ResourceDictionary>

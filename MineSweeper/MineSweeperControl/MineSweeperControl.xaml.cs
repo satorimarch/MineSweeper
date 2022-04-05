@@ -76,8 +76,6 @@ namespace MineSweeper.MineSweeperControl
                         Column = j,
                         IsMine = false,
                         IsUncover = false,
-                        Style = (Style)FindResource("DefaultButtonStyle"),
-                        //Content = "第" + (i * column + j).ToString() + "个"
                     };
                     button.Click += MyButton_Click;
                     button.PreviewMouseDown += DiscernMouseDown;
@@ -115,7 +113,6 @@ namespace MineSweeper.MineSweeperControl
                 if (!button.IsMine && rd != senderPos) {
                     button.IsMine = true;
                     i++;
-                    //button.Background = Brushes.Green; // test
                 }
             }
 
@@ -174,7 +171,6 @@ namespace MineSweeper.MineSweeperControl
                     MineChange();
 
                     button.IsUncover = true;
-                    button.Style = (Style)FindResource("MineButtonStyle");
 
                     GameFinish(false);
                 }
@@ -201,7 +197,6 @@ namespace MineSweeper.MineSweeperControl
                 RestMine--;
 
                 button.IsFlag = true;
-                button.Style = (Style)FindResource("FlagButtonStyle");
             }
 
             else { // 已被标记时, 取消标记
@@ -209,7 +204,6 @@ namespace MineSweeper.MineSweeperControl
                 RestMine++;
 
                 button.IsFlag = false;
-                button.Style = (Style)FindResource("DefaultButtonStyle");
             }
 
             MineChange();
@@ -330,19 +324,6 @@ namespace MineSweeper.MineSweeperControl
             ResourceDictionary dictionary = new ResourceDictionary();
             dictionary.Source = new Uri(@"pack://application:,,,../Theme/" + theme + "Theme.xaml", UriKind.RelativeOrAbsolute);
             this.Resources.MergedDictionaries[0] = dictionary;
-
-            foreach (MyButton button in grid.Children) {
-                if (button.IsMine && button.IsUncover) {
-                    button.Style = (Style)FindResource("MineButtonStyle");
-                }
-                else if (button.IsFlag) {
-                    button.Style = (Style)FindResource("FlagButtonStyle");
-                }
-                else {
-                    button.Style = (Style)FindResource("DefaultButtonStyle");
-                }
-            }
-
         }
 
     }
